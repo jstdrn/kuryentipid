@@ -1,0 +1,151 @@
+.tc-panel {
+  --tc-blue: var(--accent);
+  --tc-divider: var(--line);
+  min-width: 0;
+  width: 100%;
+  padding: clamp(18px, 2.1vw, 28px);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  background: var(--surface);
+  color: var(--ink);
+  color-scheme: light;
+  font-variant-numeric: tabular-nums;
+}
+.tc-header, .tc-controls, .tc-reading, .tc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.tc-header h2 { font-size: 1.17rem; line-height: 1.25; font-weight: 650; letter-spacing: -.022em; }
+.tc-header p { margin: 3px 0 0; color: var(--muted); font-size: .8rem; }
+.tc-controls { margin-block: 18px; flex-wrap: wrap; gap: 6px; }
+.tc-toggle {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  padding: 3px;
+  border: 1px solid var(--tc-divider);
+  border-radius: 9px;
+  background: var(--soft);
+}
+.tc-toggle button {
+  position: relative;
+  padding: 5px 11px;
+  min-height: 34px;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  color: var(--muted);
+  font-weight: 600;
+  font-size: .83rem;
+}
+.tc-toggle button:hover { color: var(--ink); }
+.tc-toggle button[aria-pressed=true] { background: var(--accent); color: var(--card-top); }
+.tc-toggle button:focus-visible, .tc-footer :is(button,summary):focus-visible {
+  outline: 2px solid var(--tc-blue);
+  outline-offset: 2px;
+  z-index: 1;
+}
+.tc-reading { align-items: flex-end; flex-wrap: wrap; margin-top: 8px; gap: 4px 10px; }
+.tc-reading [data-tc-label], .tc-reading [data-tc-change] { color: var(--muted); font-size: .79rem; }
+.tc-reading [data-tc-reading] {
+  display: block;
+  margin-top: 2px;
+  color: var(--ink);
+  font-size: clamp(1.5rem, 3vw, 2.1rem);
+  font-weight: 650;
+  line-height: 1.15;
+  letter-spacing: -.04em;
+}
+.tc-reading [data-tc-change] { align-self: flex-end; padding-bottom: 3px; }
+.tc-chart {
+  display: grid;
+  grid-template-columns: minmax(22px, auto) minmax(0, 1fr);
+  grid-template-rows: clamp(128px, 15vw, 188px) 23px;
+  gap: 5px 7px;
+  margin: 20px 4px 1px 0;
+}
+.tc-scale {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-block: -.5em;
+  line-height: 1;
+  color: var(--muted);
+  font-size: .7rem;
+}
+.tc-canvas {
+  position: relative;
+  color: var(--tc-blue);
+  background-image: linear-gradient(to bottom, var(--tc-divider) 1px, transparent 1px);
+  background-size: 100% 25%;
+  border-bottom: 1px solid var(--tc-divider);
+  outline-offset: 4px;
+  touch-action: pan-y;
+  cursor: crosshair;
+}
+.tc-canvas > svg { display: block; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+/* Use the same document timeline and easing as the endpoint's keyframes.
+   Release the final clip to keep the entire rounded line cap visible. */
+.tc-reveal { animation: tc-draw 1.4s linear; }
+@keyframes tc-draw {
+  from { clip-path: inset(-5% 98% -5% -1%); }
+  to { clip-path: inset(-5% 2% -5% -1%); }
+}
+.tc-endpoint, .tc-canvas [data-tc-cursor]::after {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border: 2px solid var(--surface);
+  border-radius: 100%;
+  background: var(--tc-blue);
+  box-shadow: 0 0 0 1.5px var(--tc-blue);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+.tc-endpoint { animation: var(--tc-marker) 1.4s linear both; }
+.tc-canvas [data-tc-cursor] {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-left: 1px dashed var(--muted);
+  pointer-events: none;
+}
+.tc-canvas [data-tc-cursor]::after { content: ''; top: var(--tc-y); left: 0; }
+.tc-canvas [hidden] { display: none; }
+.tc-ticks { position: relative; grid-column: 2; margin-top: 3px; }
+.tc-ticks span {
+  position: absolute;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  color: var(--muted);
+  font-size: .72rem;
+}
+.tc-ticks span:first-child { transform: none; }
+.tc-ticks span:last-child { transform: translateX(-100%); }
+.tc-footer { align-items: flex-start; gap: 8px; margin-top: 3px; border-top: 1px solid var(--tc-divider); }
+.tc-footer details { min-width: 0; flex: 1; }
+.tc-footer summary, .tc-replay {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: .81rem;
+  cursor: pointer;
+}
+.tc-footer summary { padding: 12px 0 0; width: fit-content; min-height: 36px; }
+.tc-replay { background: transparent; padding: 12px 0 0 8px; min-height: 36px; }
+.tc-footer table { width: 100%; border-collapse: collapse; font-size: .82rem; margin-top: 8px; }
+.tc-footer th, .tc-footer td { padding: 6px 0; border-bottom: 1px solid var(--tc-divider); text-align: left; }
+.tc-footer th:last-child, .tc-footer td { text-align: right; }
+.tc-footer tbody th { font-weight: 500; }
+@media (max-width: 550px) {
+  .tc-panel { padding: 17px 15px 8px; }
+  .tc-toggle button { padding-inline: 9px; min-height: 36px; }
+  .tc-chart { margin-right: 1px; }
+  .tc-controls { margin-block: 13px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tc-endpoint, .tc-reveal { animation: none; }
+}

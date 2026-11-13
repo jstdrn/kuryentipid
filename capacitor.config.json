@@ -1,0 +1,18 @@
+{
+  "appId": "ph.kuryentipid.app",
+  "appName": "Kuryentipid",
+  "webDir": "public",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "backgroundColor": "#06182e"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "backgroundColor": "#06182e",
+      "showSpinner": false
+    }
+  }
+}
